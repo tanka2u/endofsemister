@@ -3,7 +3,7 @@ import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 import Profile from "./components/pages/Profile.js";
 import { useState } from "react";
 import Home from "./components/pages/Home.js";
-import Layout from "./components/Layout.js";
+import Layout from "./components/Dashboard.js";
 
 function App() {
   const [user, setUser] = useState(null);
