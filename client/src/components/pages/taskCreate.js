@@ -1,9 +1,45 @@
-function Tasks({ children }) {
-  return(
-    <>
+import styles from "../taskCreate.css"
+import { useContext, useEffect, useRef, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuth";
+import Auth from "./Auth";
+import ProfileModal from "./ProfileModal";
+function Layout({ children }) {
+    const { user } = useContext(AuthContext);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const { logout } = useAuth();
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
+  
+    const openModal = () => {
+      setIsModalOpen(true);
+    };
+    
+    const toggleDropdown = () => {
+      setIsDropdownOpen(!isDropdownOpen);
+    };
+  
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+  
+    useEffect(() => {
+      document.addEventListener('click', handleClickOutside);
+      return () => {
+        document.removeEventListener('click', handleClickOutside);
+      };
+    }, []);
+  
+    const handleLogout = () => {
+      logout();
+    }
+  
+
     <div class="container">
         <div class="form-header">
-            <h1><b>Create New Task</b></h1>
+            <h1>Create New Task</h1>
         </div>
         <div class="form-section">
             <form>
@@ -32,6 +68,7 @@ function Tasks({ children }) {
                         <option value="user1">User 1</option>
                         <option value="user2">User 2</option>
                         <option value="user3">User 3</option>
+
                     </select>
                 </div>
                 <div class="form-field">
@@ -40,7 +77,5 @@ function Tasks({ children }) {
             </form>
         </div>
     </div>
-    </>
-);
-}
-export default Tasks;
+
+

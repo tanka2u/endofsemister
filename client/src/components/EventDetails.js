@@ -1,51 +1,7 @@
 import styles from "../eventDetails.css"
-import { useContext, useEffect, useRef, useState } from "react";
-import { AuthContext } from "../context/AuthContext";
-import { useAuth } from "../hooks/useAuth";
-import Auth from "./Auth";
-import ProfileModal from "./ProfileModal";
-function Layout({ children }) {
-    const { user } = useContext(AuthContext);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const { logout } = useAuth();
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const dropdownRef = useRef(null);
-  
-    const openModal = () => {
-      setIsModalOpen(true);
-    };
-    
-    const toggleDropdown = () => {
-      setIsDropdownOpen(!isDropdownOpen);
-    };
-  
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsDropdownOpen(false);
-      }
-    };
-  
-    useEffect(() => {
-      document.addEventListener('click', handleClickOutside);
-      return () => {
-        document.removeEventListener('click', handleClickOutside);
-      };
-    }, []);
-  
-    const handleLogout = () => {
-      logout();
-    }
-  
+function Events({ children }) {
   return(
     <>
-      <>
-      <div class="navbar">
-        <a href="/">Home</a>
-        <a href="/">Events</a>
-        <a href="/">Tasks</a>
-        <a href="/">Profile</a>
-        <a href="/">Logout</a>
-    </div>
     <div class="container">
         <div class="event-header">
             <h1> <b>Event Details</b></h1>
@@ -83,7 +39,6 @@ function Layout({ children }) {
     </div>
 
     </>
-</>
 );
 }
-export default Layout;
+export default Events;

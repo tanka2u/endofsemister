@@ -1,0 +1,7 @@
+body { align-items: center; font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
+.list-item { width: 80%; margin: auto; overflow: hidden; align-content: center; }
+.list-item .email { width: 80%; margin: auto; overflow: hidden; font-size: 20px; }
+.list-item .email .em { padding: 10px; text-align: left; font-size: 25px;}
+.list-item .email .name { padding: 10px; text-align: left; font-size: 25px; }
+.list-item .email .dob { padding: 10px; text-align: left; font-size: 25px; }
+.list-item .email .address { padding: 10px; text-align: left; font-size: 25px; }
