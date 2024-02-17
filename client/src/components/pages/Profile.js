@@ -1,23 +1,20 @@
-import { useContext } from "react";
-import { AuthContext } from "../../context/AuthContext";
-import Auth from "../Auth";
-import profile from "../../components/profile.css";
+import Layout from "../Layout";
+import profilecss from "../../components/profile.css";
 const Profile = () => {
-  const { user } = useContext(AuthContext);
   return (
     <>
-      {!user ? (
-        <Auth />
-      ) : (
-        <div className="list-item">
+    <Layout>
+      <div className="container">
+      <div className="list-item">
           <ul className="email">
-            <li className="em">Email: {user.userEmail}</li>
-            <li className="name">Name: {user.name}</li>
-            <li className="dob">Date of Birth : {user.dob}</li>
-            <li className="address">Address : {user.address}</li>
+            <li className="em">Email: Tanka prasad poudel</li>
+            <li className="name">Name: </li>
+            <li className="dob">Date of Birth : </li>
+            <li className="address">Address : </li>
           </ul>
         </div>
-      )}
+      </div>
+    </Layout>
     </>
   );
 }

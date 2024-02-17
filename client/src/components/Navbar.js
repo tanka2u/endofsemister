@@ -1,21 +1,24 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 const Navbar = ({ onLogout }) => {
-  const navLinks = ['Home','Event','Tasks','Profile','Logout'];
+  const navigate = useNavigate();
+  const navLinks = ['Home','Event','Tasks','Profile'];
+  const logout = () => {
+
+  }
   return (
     <>
     <div class="navbar">
         {navLinks.map((route, index) => (
             <Link
             key={index}
-              to={route.toLowerCase()}
-              smooth={true}
-              duration={500}>
+              to={`/${route.toLowerCase()}`}>
               {route}
             </Link>
         ))}
+        <Link to={'/login'}onClick={logout}>Logout</Link>
         </div>
     </>
   );

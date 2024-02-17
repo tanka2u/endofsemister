@@ -1,3 +1,5 @@
+const Event = require("../model/event.model");
+
 class EventService {
     async create(event) {
         return event.save()
@@ -10,6 +12,11 @@ class EventService {
             return false;
         });
 
+    }
+
+    async getEvents() {
+        const events = await Event.find();
+        return events;
     }
 }
 

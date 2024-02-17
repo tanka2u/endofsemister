@@ -3,19 +3,56 @@ const { connect } = require('./db');
 connect();
 const Event = require('./model/event.model');
 const Task = require('./model/task.model');
+const User = require('./model/user.model');
 const EventService = require('./services/event.service');
 const TaskService = require('./services/task.services');
-const UserAddService = require('./services/user.services');
+const UserService = require('./services/user.services');
 require('dotenv').config();
 const express = require('express');
+const session = require('express-session');
+const Keycloak = require('keycloak-connect');
+const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
 
+const memoryStore = new session.MemoryStore();
+const keycloak = new Keycloak({
+  store: memoryStore
+});
+
+app.use(cors({
+  origin: ['http://localhost:3000', 'http://localhost:8080'] // Allow requests from port 3000
+}));
+
+app.use(session({
+  resave: false,
+  secret: 'projectx',
+  saveUninitialized: true,
+  store: memoryStore
+}));
+
+app.use(keycloak.middleware());
+
 app.use(express.json());
-app.get('/home', (req, res) => {
+// keycloak.protect()
+app.get('/home' , (req, res) => {
   res.send('Welcome to my Express API!');
 });
 
+app.post('/login', async (req, res) => {
+  console.log(req.body)
+  const response = await axios.post('http://localhost:8080/auth/realms/projectx/protocol/openid-connect/token', {
+      grant_type: 'password',
+      client_id: 'projectx',
+      username: req.body.username,
+      password: req.body.password,
+    });
+    console.log(response);
+    // Send the token back to the client
+    // res.json({ token: response.data.access_token });
+});
+
+// keycloak.protect()
 app.post('/events/create', async (req, res) => {
   const eventService = new EventService();
   const body = req.body;
@@ -29,6 +66,38 @@ app.post('/events/create', async (req, res) => {
   });
   const response = await eventService.create(event);
   res.json(response);
+});
+
+app.get('/users', async function(req, res) {
+  const userService = new UserService();
+  const users = await userService.getAllUsers();
+  res.json(users);
+});
+
+app.get('/events', async function(req, res){
+  const eventService = new EventService();
+  const events = await eventService.getEvents();
+  res.json(events);
+});
+
+app.get('/tasks', async function(req, res){
+  const tasks = await Task.find();
+  res.json(tasks);
+});
+
+app.get('/events/:id', async function(req, res){
+  const eventId = req.params.id;
+
+  try {
+    const event = await Event.findById(eventId).populate('eventResponsible');
+    if (!event) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
+    res.json(event);
+  } catch (error) {
+    console.error('Error fetching event details:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 app.listen(port, () => {
@@ -45,14 +114,43 @@ app.post('/tasks/create', async (req, res) => {
     deadline: body.deadline,
     assignee: body.assignee
   });
+  console.log(newTask);
   const response = await taskService.create(newTask);
   res.json(response);
 });
 
-app.post('/users', async (req, res) => {
-  const useraddService = new UserAddService();
+app.post('/user/create', async (req, res) => {
+  const userService = new UserService();
   const body = req.body;
-  const response = await useraddService.create(body.email, body.password, body.confirmPassword);
+  const newUser = new User({
+    username: body.username,
+    name: body.name,
+    email: body.email,
+    password: body.password,
+    dateOfBirth: body.dateOfBirth,
+    address: body.address
+  });
+  const response = await userService.create(newUser);
   res.json(response);
 });
 
+app.delete('/events/:id', async (req, res) => {
+  const eventId = req.params.id;
+  const event = await Event.findByIdAndDelete(eventId);
+  res.json(true);
+});
+
+app.put('/events/:id', async (req, res) => {
+  const eventId = req.params.id;
+  const updateData = req.body; // Data to update, sent in the request body
+  try {
+    const updatedEvent = await Event.findByIdAndUpdate(eventId, updateData, { new: true });
+    if (!updatedEvent) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
+    res.json(updatedEvent);
+  } catch (error) {
+    console.error('Error updating event:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});

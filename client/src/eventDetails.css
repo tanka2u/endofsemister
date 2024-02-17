@@ -1,4 +1,4 @@
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
+    .container { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; align-items: center; }
     .navbar { background-color: #333; color: white; padding: 10px; text-align: center; }
     .navbar a { color: white; margin: 0 10px; text-decoration: none; }
     .container { width: 80%; margin: auto; overflow: hidden; }
@@ -7,4 +7,4 @@
     .event-info { margin-bottom: 15px; }
     .event-info label { font-weight: bold; }
     .event-info div { margin-left: 5px; }
-    .button { padding: 10px 20px; background-color: #008CBA; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    .container .button { margin-right: 20px; justify-content: space-between; padding: 10px 20px; background-color: #008CBA; color: white; border: none; border-radius: 4px; cursor: pointer; }

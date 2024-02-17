@@ -1,7 +1,9 @@
 import styles from "../eventDetails.css"
+import Layout from "./Layout";
 function Events({ children }) {
   return(
     <>
+    <Layout>
     <div class="container">
         <div class="event-header">
             <h1> <b>Event Details</b></h1>
@@ -37,7 +39,7 @@ function Events({ children }) {
             </div>
         </div>
     </div>
-
+    </Layout>
     </>
 );
 }
