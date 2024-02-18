@@ -1,96 +1,136 @@
 import React, { useState } from "react";
+import Layout from "../Layout";
+import Style from "./RegisterForm.css";
+import axios from 'axios';
+
 const RegisterForm = () => {
-    const [formData, setFormData] = useState({
-      username: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      address: '',
-      dateofbirth: ''
-    });
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prevState => ({
-          ...prevState,
-          [name]: value
-        }));
-      };
-      const handleSubmit = (e) => {
-        e.preventDefault();
-        // Here you can add your logic to submit the form data
-        console.log(formData);
-      };
-    
-      return (
-        <div>
-          <h2>Register</h2>
+  const [formData, setFormData] = useState({
+    username: '',
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    address: '',
+    dateofbirth: ''
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (formData.password === formData.confirmPassword) {
+      const response = await axios.post('http://localhost:3001/user/create', formData);
+      if (response.status === 200) {
+        alert('user saved');
+      } else {
+        alert('something went wrong.');
+      }
+    } else {
+      alert('password and confirm password mismatch');
+    }
+  };
+
+  return (
+    <>
+      <Layout>
+        <div className="container">
+          <form onSubmit={handleSubmit}>
+          <div className="header">
+            <div className="text">Sign Up</div>
+            <div className="underline"></div>
+          </div>          
             <div>
-              <label onSubmit={handleSubmit} For="username">Username:</label>
-              <input 
-                type="text" 
-                id="username" 
-                name="username" 
-                value={formData.username} 
-                onChange={handleChange} 
-                required 
-              />
+            <div className="name">Name:</div>
+                <input placeholder="Please, Enter your name"
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
             </div>
-            <div>
-              <label htmlFor="email">Email:</label>
-              <input 
-                type="email" 
-                id="email" 
-                name="email" 
-                value={formData.email} 
-                onChange={handleChange} 
-                required 
+            <div className="inputs">
+              <div className="input">
+              
+              <div className="username">Username:</div>
+                <input placeholder="Please, Enter your username"
+                  type="text"
+                  id="username"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="input">
+              <div className="email">Email:</div>
+              <input placeholder="Please, Enter your e-mail"
+                type="text"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
               />
+              </div>
+              <div className="input">
+              <div className="password">Password:</div>
+              <input placeholder="Please, Enter your password"
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+              </div>
+              <div className="input">
+              <div className="confirmPassword">Confirm Password:</div>
+              <input placeholder="Please, re-enter your password"
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+              />
+              </div>
+              <div className="input">
+              <div className="dateofbirth">DOB:</div>
+              <input placeholder="Please, Enter Date of Birth"
+                type="date"
+                id="dateofbirth"
+                name="dateofbirth"
+                value={formData.dateofbirth}
+                onChange={handleChange}
+                required
+              />
+              </div>
+              <div className="input">
+              <div className="address">Address:</div>
+              <input placeholder="Please Enter Address"
+                type="text"
+                id="address"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                required
+              />
+              </div>
             </div>
-            <div>
-              <label htmlFor="password">Password:</label>
-              <input 
-                type="password" 
-                id="password" 
-                name="password" 
-                value={formData.password} 
-                onChange={handleChange} 
-                required 
-              />
-            </div>
-            <div>
-              <label htmlFor="confirmPassword">Confirm Password:</label>
-              <input 
-                type="password" 
-                id="confirmPassword" 
-                name="confirmPassword" 
-                value={formData.confirmPassword} 
-                onChange={handleChange} 
-                required 
-              />
-              <div>
-              <label htmlFor="dateofbirth">Date of Birth:</label>
-              <input 
-                type="text" 
-                id="dateofbirth" 
-                name="dateofbirth" 
-                value={formData.confirmPassword} 
-                onChange={handleChange} 
-                required 
-              />
-              <div>
-              <label htmlFor="address">Address:</label>
-              <input 
-                type="text" 
-                id="address" 
-                name="address" 
-                value={formData.confirmPassword} 
-                onChange={handleChange} 
-                required 
-              />
-            </div>
-            <button type="submit">Register</button>
-          </div>
+            <button type="submit" className="button">Register</button>  
+          </form>
         </div>
-      );
-    
-    export default RegisterForm;
+      </Layout>
+    </>
+  );
+};
+
+export default RegisterForm;

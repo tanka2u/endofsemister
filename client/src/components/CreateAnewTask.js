@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import Layout from "./Layout";
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 function Tasks({ children }) {
+    const navigate = useNavigate();
     const [allEvents, setAllEvents] = useState([]);
     const [allUsers, setAllUsers] = useState([]);
 
@@ -54,10 +56,11 @@ function Tasks({ children }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         // Handle form submission logic here
-   const response = await axios.post('http://localhost:3001/tasks/create', formData)
-   console.log(formData);
-   alert('event created.');
-   console.log(response);
+            const response = await axios.post('http://localhost:3001/tasks/create', formData)
+            console.log(formData);
+            alert('event created.');
+            console.log(response);
+            navigate("/home")
     };
   return(
     <>

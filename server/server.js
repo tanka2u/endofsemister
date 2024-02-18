@@ -14,7 +14,7 @@ const Keycloak = require('keycloak-connect');
 const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
-
+const axios = require('axios');
 const memoryStore = new session.MemoryStore();
 const keycloak = new Keycloak({
   store: memoryStore
@@ -40,14 +40,35 @@ app.get('/home' , (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-  console.log(req.body)
-  const response = await axios.post('http://localhost:8080/auth/realms/projectx/protocol/openid-connect/token', {
-      grant_type: 'password',
+  try {
+    console.log("Logging in");
+    const response = await axios.post('http://localhost:8080/auth/realms/projectx/protocol/openid-connect/token', {
+      grant_type: "password",
       client_id: 'projectx',
-      username: req.body.username,
-      password: req.body.password,
+      username: 'projectx',
+      password: 'test123',
+    }, {
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      timeout: 3500,
     });
     console.log(response);
+    const username = req.body.username;
+    const user = await User.findOne({ username: username });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    const password = req.body.password;
+    const isPasswordValid = await user.comparePassword(password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Invalid password' });
+    }
+    return res.status(200).json({ message: 'Login successful', user: user });
+  } catch(error) {
+    console.error(error);
+    return res.status(401).json({ message: 'Invalid username or password' });
+  }
+  
     // Send the token back to the client
     // res.json({ token: response.data.access_token });
 });
@@ -127,7 +148,7 @@ app.post('/user/create', async (req, res) => {
     name: body.name,
     email: body.email,
     password: body.password,
-    dateOfBirth: body.dateOfBirth,
+    dateOfBirth: body.dateofbirth,
     address: body.address
   });
   const response = await userService.create(newUser);

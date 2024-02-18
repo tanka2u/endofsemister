@@ -2,16 +2,15 @@ import { useEffect, useState } from "react";
 import styles from "../eventDetails.css"
 import axios from 'axios';
 import Layout from "./Layout";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 function EventDetail({ children }) {
   
-  
-  
+  const navigate = useNavigate();
   const handleDelete = async () => {
     try {
       const response = await axios.delete(`http://localhost:3001/events/${id}`);
       console.log('Data deleted successfully');
-      window.location.href = "/event";
+      navigate("/home");
     } catch (error) {
       console.error('Error deleting data:', error);
     }

@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import styles from "../eventDetails.css"
 import Layout from "./Layout";
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 function EventCreate({ children }) {
+    const navigate = useNavigate();
     const [selectedMultipleOptions, setSelectedMultipleOptions] = useState([]);
     const [allUsers, setAllUsers] = useState([]);
 
@@ -54,6 +56,7 @@ function EventCreate({ children }) {
         const response = await axios.post('http://localhost:3001/events/create', data);
         alert('event created.');
         console.log(response);
+        navigate("/home");
         // You can send the form data to an API, etc.
       };
   return(
@@ -105,9 +108,10 @@ function EventCreate({ children }) {
                 <div class="form-field">
                     <label for="eventParticipants">Participants</label>
                     <select id="eventParticipants" name="eventParticipants" multiple onChange={handleSelectChange} value={selectedMultipleOptions}>
-                        <option value="participant1">Participant 1</option>
-                        <option value="participant2">Participant 2</option>
-                        <option value="participant3">Participant 3</option>
+                        <option value="Tanka">Tanka</option>
+                        <option value="Thoma">Thoma</option>
+                        <option value="Antony">Antony</option>
+                        <option value="AANA">AANA</option>
                     </select>
                 </div>
                 <div class="form-field">
